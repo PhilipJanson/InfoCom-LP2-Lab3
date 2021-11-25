@@ -14,7 +14,7 @@ def moveDrone(current_coords, from_coords, to_coords, index):
 
     sleep(0.02)
     
-    return (current_coords[0] + index * ((delta_long / dist) /10000), current_coords[1] + index * ((delta_lat / dist) /10000))
+    return (current_coords[0] + index * ((delta_long / dist) / 10000), current_coords[1] + index * ((delta_lat / dist) / 10000))
 #====================================================================================================
 
 
@@ -35,8 +35,8 @@ def run(current_coords, from_coords, to_coords, SERVER_URL):
         
         drone_coords = moveDrone(current_coords, from_coords, to_coords, index)
         
-        xDist = abs(drone_coords[0] - from_coords[0])
-        yDist = abs(drone_coords[1] - from_coords[1])
+        dist_x = abs(drone_coords[0] - from_coords[0])
+        dist_y = abs(drone_coords[1] - from_coords[1])
         
         with requests.Session() as session:
             drone_location = {'longitude': drone_coords[0],

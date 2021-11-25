@@ -8,13 +8,13 @@ from time import sleep
 #====================================================================================================
 def moveDrone(current_coords, from_coords, to_coords, index):
     
-    deltaLong = (from_coords[0] - current_coords[0])
-    deltaLat = (from_coords[1] - current_coords[1])
+    delta_long = (from_coords[0] - current_coords[0])
+    delta_lat = (from_coords[1] - current_coords[1])
     dist = math.sqrt(deltaLong**2 + deltaLat**2)
 
     sleep(0.02)
     
-    return (current_coords[0] + index * ((deltaLong/dist) /10000), current_coords[1] + index * ((deltaLat/dist)/10000))
+    return (current_coords[0] + index * ((delta_long / dist) /10000), current_coords[1] + index * ((delta_lat / dist) /10000))
 #====================================================================================================
 
 
@@ -25,9 +25,19 @@ def run(current_coords, from_coords, to_coords, SERVER_URL):
     # 3. While moving, the drone keeps sending it's location to the database.
     #====================================================================================================
     index = 0
-    while (round(current_coords[0], 3) != round(from_coords[0], 3) and round(current_coords[1], 3) != round(from_coords[1], 3)):
+    dist_x = abs(current_coords[0] - from_coords[0])
+    dist_y = abs(current_coords[1] - from_coords[1])
+    
+    while (dist_x > 0.001 or dist_y > 0.001):
         index += 1
+        print(dist_x)
+        print(dist_y)
+        
         drone_coords = moveDrone(current_coords, from_coords, to_coords, index)
+        
+        xDist = abs(drone_coords[0] - from_coords[0])
+        yDist = abs(drone_coords[1] - from_coords[1])
+        
         with requests.Session() as session:
             drone_location = {'longitude': drone_coords[0],
                               'latitude': drone_coords[1]

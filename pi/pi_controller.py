@@ -10,7 +10,7 @@ def moveDrone(current_coords, from_coords, to_coords, index):
     
     delta_long = (from_coords[0] - current_coords[0])
     delta_lat = (from_coords[1] - current_coords[1])
-    dist = math.sqrt(deltaLong**2 + deltaLat**2)
+    dist = math.sqrt(delta_long ** 2 + delta_lat ** 2)
 
     sleep(0.02)
     

@@ -1,14 +1,20 @@
 import math
 import requests
 import argparse
+from time import sleep
 
-#Write you own function that moves the dron from one place to another 
+#Write you own function that moves the drone from one place to another 
 #the function returns the drone's current location while moving
 #====================================================================================================
-def your_function():
-    longitude = 13.21008
-    latitude = 55.71106
-    return (longitude, latitude)
+def moveDrone(current_coords, from_coords, to_coords, index):
+    
+    deltaLong = (from_coords[0] - current_coords[0])
+    deltaLat = (from_coords[1] - current_coords[1])
+    dist = math.sqrt(deltaLong**2 + deltaLat**2)
+
+    sleep(0.02)
+    
+    return (current_coords[0] + index * ((deltaLong/dist) /10000), current_coords[1] + index * ((deltaLat/dist)/10000))
 #====================================================================================================
 
 
@@ -18,8 +24,10 @@ def run(current_coords, from_coords, to_coords, SERVER_URL):
     # 2. Plan a path with your own function, so that the drone moves from [current_address] to [from_address], and the from [from_address] to [to_address]. 
     # 3. While moving, the drone keeps sending it's location to the database.
     #====================================================================================================
-    while True:
-        drone_coords = your_function()
+    index = 0
+    while (round(current_coords[0], 3) != round(from_coords[0], 3) and round(current_coords[1], 3) != round(from_coords[1], 3)):
+        index += 1
+        drone_coords = moveDrone(current_coords, from_coords, to_coords, index)
         with requests.Session() as session:
             drone_location = {'longitude': drone_coords[0],
                               'latitude': drone_coords[1]
